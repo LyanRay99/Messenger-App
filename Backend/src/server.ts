@@ -1,6 +1,8 @@
 import express, { Express, Request, Response } from 'express'
 import path from 'path'
 import dotenv from 'dotenv'
+import rootRouter from './routers/router'
+
 dotenv.config()
 
 const app: Express = express()
@@ -16,6 +18,9 @@ app.use('/Public', express.static(publicPath))
 app.get('/', (req: Request, res: Response) => {
   res.send("Hello World! I'm Lyan Ray")
 })
+
+//* using router
+app.use('/api/v1', rootRouter)
 
 const PORT: string | number = process.env.DATABASE_PORT || 3000
 app.listen(PORT, () => {

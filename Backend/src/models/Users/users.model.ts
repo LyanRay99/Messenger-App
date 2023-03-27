@@ -1,5 +1,5 @@
 import { DataTypes, Model, Optional } from 'sequelize'
-import sequelizeConnection from '../config/db_connect'
+import sequelizeConnection from '../../config/db_connect'
 
 interface UsersAttributes {
   id: number
@@ -7,15 +7,15 @@ interface UsersAttributes {
   password: string
   email: string
   full_name: string
-  sex: boolean
+  sex: string
   address: string
   birthday: Date
   phone_number: string
-  avatar: string | null
-  role: number
-  active: boolean
-  created_at: Date
-  updated_at: Date
+  avatar?: string
+  role?: string
+  active?: boolean
+  created_at?: Date
+  updated_at?: Date
 }
 
 export interface UsersInput extends Optional<UsersAttributes, 'id'> {}
@@ -27,12 +27,12 @@ class Users extends Model<UsersAttributes, UsersInput> implements UsersAttribute
   public password!: string
   public email!: string
   public full_name!: string
-  public sex!: boolean
+  public sex!: string
   public address!: string
   public birthday!: Date
   public phone_number!: string
-  public avatar!: string | null
-  public role!: number
+  public avatar!: string
+  public role!: string
   public active!: boolean
   public readonly created_at!: Date
   public readonly updated_at!: Date
@@ -47,11 +47,11 @@ Users.init(
       allowNull: false
     },
     username: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.STRING,
       allowNull: false
     },
     password: {
-      type: DataTypes.STRING(10),
+      type: DataTypes.STRING,
       allowNull: false
     },
     email: {
@@ -59,15 +59,15 @@ Users.init(
       allowNull: false
     },
     full_name: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING,
       allowNull: false
     },
     sex: {
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.STRING,
       allowNull: false
     },
     address: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING,
       allowNull: false
     },
     birthday: {
@@ -80,27 +80,23 @@ Users.init(
     },
     avatar: {
       type: DataTypes.STRING,
-      allowNull: true
+      allowNull: false,
+      defaultValue:
+        'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80'
     },
     role: {
-      type: DataTypes.INTEGER,
-      allowNull: false
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'Client'
     },
     active: {
       type: DataTypes.BOOLEAN,
-      allowNull: false
-    },
-    created_at: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
-    updated_at: {
-      type: DataTypes.DATE,
-      allowNull: false
+      allowNull: false,
+      defaultValue: true
     }
   },
   {
-    timestamps: false,
+    timestamps: true,
     sequelize: sequelizeConnection,
     underscored: false
   }

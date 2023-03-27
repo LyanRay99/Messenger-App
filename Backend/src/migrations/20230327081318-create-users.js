@@ -11,11 +11,11 @@ module.exports = {
       },
       username: {
         allowNull: false,
-        type: Sequelize.STRING(10)
+        type: Sequelize.STRING
       },
       password: {
         allowNull: false,
-        type: Sequelize.STRING(10)
+        type: Sequelize.STRING
       },
       email: {
         allowNull: false,
@@ -23,15 +23,15 @@ module.exports = {
       },
       full_name: {
         allowNull: false,
-        type: Sequelize.STRING(50)
+        type: Sequelize.STRING
       },
       sex: {
         allowNull: false,
-        type: Sequelize.BOOLEAN
+        type: Sequelize.STRING
       },
       address: {
         allowNull: false,
-        type: Sequelize.STRING(100)
+        type: Sequelize.STRING
       },
       birthday: {
         allowNull: false,
@@ -42,22 +42,25 @@ module.exports = {
         type: Sequelize.STRING
       },
       avatar: {
-        type: Sequelize.STRING
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue:
+          'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80'
       },
       role: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING,
+        defaultValue: 'Client'
       },
       active: {
         allowNull: false,
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue: true
       },
       createdAt: {
-        allowNull: false,
         type: Sequelize.DATE
       },
       updatedAt: {
-        allowNull: false,
         type: Sequelize.DATE
       }
     })
