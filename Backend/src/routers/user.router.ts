@@ -1,9 +1,9 @@
 import express from 'express'
 import userController from '../controllers/users'
-import { M_checkEmailExist } from '../middlewares/util.middleware'
+import { M_checkRegister } from '../middlewares/util.middleware'
 
 const userRouter = express.Router()
 
-userRouter.post('/register', M_checkEmailExist, userController.register)
+userRouter.post('/register', M_checkRegister, userController.register)
 
 export default userRouter

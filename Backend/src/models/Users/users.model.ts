@@ -1,22 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelizeConnection from '../../config/db_connect'
-
-interface UsersAttributes {
-  id: number
-  username: string
-  password: string
-  email: string
-  full_name: string
-  sex: string
-  address: string
-  birthday: Date
-  phone_number: string
-  avatar?: string
-  role?: string
-  active?: boolean
-  created_at?: Date
-  updated_at?: Date
-}
+import { UsersAttributes } from '../../types/user.type'
 
 export interface UsersInput extends Optional<UsersAttributes, 'id'> {}
 export interface UsersOutput extends Required<UsersAttributes> {}
