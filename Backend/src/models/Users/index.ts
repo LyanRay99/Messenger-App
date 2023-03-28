@@ -1,3 +1,3 @@
-import Users from "./users.model";
+import Users from './users.model'
 
-export default Users;
+export default Users

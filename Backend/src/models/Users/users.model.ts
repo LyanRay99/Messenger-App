@@ -6,7 +6,7 @@ export interface UsersInput extends Optional<UsersAttributes, 'id'> {}
 export interface UsersOutput extends Required<UsersAttributes> {}
 
 class Users extends Model<UsersAttributes, UsersInput> implements UsersAttributes {
-  public id!: number
+  public id!: string
   public username!: string
   public password!: string
   public email!: string
@@ -25,8 +25,7 @@ class Users extends Model<UsersAttributes, UsersInput> implements UsersAttribute
 Users.init(
   {
     id: {
-      type: DataTypes.BIGINT,
-      autoIncrement: true,
+      type: DataTypes.STRING,
       primaryKey: true,
       allowNull: false
     },

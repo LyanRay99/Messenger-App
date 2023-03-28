@@ -17,11 +17,12 @@ module.exports = {
       'Users',
       [
         {
+          id: 'gerthrt',
           username: 'Doe',
           password: 'password',
           email: 'johndoe@me.com',
           full_name: 'John Doe',
-          sex: "female",
+          sex: 'female',
           address: 'address',
           birthday: '2000-01-01',
           phone_number: '123456789',
@@ -32,11 +33,12 @@ module.exports = {
           updatedAt: new Date()
         },
         {
+          id: 'hsrth',
           username: 'John',
           password: 'password',
           email: 'johndoe@me.com',
           full_name: 'Admin',
-          sex: "male",
+          sex: 'male',
           address: 'address',
           birthday: '2000-01-01',
           phone_number: '123456789',

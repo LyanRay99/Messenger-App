@@ -14,7 +14,8 @@ export const validateRegister = async (userData: UsersAttributes) => {
     phone_number: Joi.string()
       .length(10)
       .pattern(/^[0-9]+$/)
-      .required()
+      .required(),
+    role: Joi.string()
   })
 
   return check.validate(userData)

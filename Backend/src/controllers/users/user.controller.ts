@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import Users from '../../models/Users'
+import Users from '../../models/users'
 import { UsersAttributes } from './../../types/user.type'
+import { nanoid } from 'nanoid'
 
 export const register = async (req: Request, res: Response): Promise<Response> => {
   try {
@@ -14,6 +15,7 @@ export const register = async (req: Request, res: Response): Promise<Response> =
     const hashPassword = bcrypt.hashSync(user.password, salt)
 
     const newUser = await Users.create({
+      id: nanoid(), // create id nano
       username: user.username,
       password: hashPassword,
       email: user.email,
@@ -21,7 +23,8 @@ export const register = async (req: Request, res: Response): Promise<Response> =
       sex: user.sex,
       address: user.address,
       birthday: user.birthday,
-      phone_number: user.phone_number
+      phone_number: user.phone_number,
+      role: user?.role
     })
 
     return res.status(201).send({
@@ -42,7 +45,7 @@ export const login = async (req: Request, res: Response) => {
   try {
     const user: UsersAttributes = req.body
 
-    // //* create token by jsonwebtoken package
+    //* create token by jsonwebtoken package
     const token = jwt.sign({ username: user.username, password: user.password }, 'secretKey', {
       expiresIn: 60 * 60 //* time expired of token (here setup 1 hour)
     })
@@ -70,25 +73,53 @@ export const login = async (req: Request, res: Response) => {
   }
 }
 
-// * login
-//* get detail
-//* update profile
+export const getAllUser = async (req: Request, res: Response) => {
+  try {
+    const user = await Users.findAll()
+
+    return res.status(200).send({
+      status: 200,
+      message: 'Get user success',
+      data: user
+    })
+  } catch (error) {
+    res.status(500).send({
+      status: 500,
+      message: 'Get user failed',
+      errors: error
+    })
+  }
+}
+
+export const getUserDetail = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+
+    const user = await Users.findOne({
+      where: {
+        id
+      }
+    })
+
+    return res.status(200).send({
+      status: 200,
+      message: 'Get user detail success',
+      data: user
+    })
+  } catch (error) {
+    res.status(500).send({
+      status: 500,
+      message: 'Get user detail failed',
+      errors: error
+    })
+  }
+}
+
+//* update
 //* upload avatar
 //* change password
 
-// export const getUsers = async (req: Request, res: Response) => {
-//   try {
-//     const users = await Users.findAll()
-//     res.send(users)
-//   } catch (error) {
-//     res.status(500).send(error)
-//   }
-// }
-
 /**
  ** admin
- ** - create
- ** - get
- ** - update
  ** - delete
  */

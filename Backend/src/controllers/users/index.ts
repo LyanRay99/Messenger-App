@@ -1,8 +1,10 @@
-import { register, login } from './user.controller'
+import { register, login, getUserDetail, getAllUser } from './user.controller'
 
 const userController = {
   register: register,
-  login: login
+  login: login,
+  getUserDetail: getUserDetail,
+  getAllUser: getAllUser
 }
 
 export default userController
