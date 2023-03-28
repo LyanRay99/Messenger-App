@@ -1,4 +1,4 @@
-import { register, login, getUserDetail, getAllUser, updateUser, deleteUser } from './user.controller'
+import { register, login, getUserDetail, getAllUser, updateUser, deleteUser, uploadAvatar } from './user.controller'
 
 const userController = {
   register: register,
@@ -6,7 +6,8 @@ const userController = {
   getUserDetail: getUserDetail,
   getAllUser: getAllUser,
   updateUser: updateUser,
-  deleteUser: deleteUser
+  deleteUser: deleteUser,
+  uploadAvatar: uploadAvatar
 }
 
 export default userController

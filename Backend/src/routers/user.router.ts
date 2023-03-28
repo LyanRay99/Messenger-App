@@ -6,13 +6,15 @@ import {
   M_checkID,
   M_authentication,
   M_authorization,
-  M_checkCurrentPassword
+  M_checkCurrentPassword,
+  M_uploadAvatar
 } from '../middlewares/users/util.middleware'
 
 const userRouter = express.Router()
 
 userRouter.post('/register', M_checkRegister, userController.register)
 userRouter.post('/login', M_checkLogin, userController.login)
+userRouter.post('/upload-avatar', M_authentication, M_uploadAvatar('avatars'), userController.uploadAvatar)
 userRouter.get('/', M_authentication, M_authorization, userController.getAllUser)
 userRouter.get('/:id', M_authentication, M_checkID, userController.getUserDetail)
 userRouter.put('/:id', M_authentication, M_checkID, userController.updateUser)

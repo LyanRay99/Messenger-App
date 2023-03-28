@@ -1,20 +1,21 @@
 import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import { nanoid } from 'nanoid'
 import Users from '../../models/users'
 import { UsersAttributes, UsersAttributesUpdates } from './../../types/user.type'
-import { nanoid } from 'nanoid'
+import { URL } from '../../constants/url'
 
 export const register = async (req: Request, res: Response): Promise<Response> => {
   try {
     const user: UsersAttributes = req.body
     //* create 1 chain to encode password
-    const salt = bcrypt.genSaltSync(10)
+    const salt: string = bcrypt.genSaltSync(10)
 
     //* encode salt + password
-    const hashPassword = bcrypt.hashSync(user.password, salt)
+    const hashPassword: string = bcrypt.hashSync(user.password, salt)
 
-    const newUser = await Users.create({
+    const newUser: Users = await Users.create({
       id: nanoid(), // create id nano
       username: user.username,
       password: hashPassword,
@@ -46,11 +47,11 @@ export const login = async (req: Request, res: Response) => {
     const user: UsersAttributes = req.body
 
     //* create token by jsonwebtoken package
-    const token = jwt.sign({ username: user.username, password: user.password }, 'secretKey', {
+    const token: string = jwt.sign({ username: user.username, password: user.password }, 'secretKey', {
       expiresIn: 60 * 60 //* time expired of token (here setup 1 hour)
     })
 
-    const userData = await Users.findOne({
+    const userData: Users | null = await Users.findOne({
       where: {
         username: user.username
       }
@@ -75,7 +76,7 @@ export const login = async (req: Request, res: Response) => {
 
 export const getAllUser = async (req: Request, res: Response) => {
   try {
-    const user = await Users.findAll()
+    const user: Users[] = await Users.findAll()
 
     return res.status(200).send({
       status: 200,
@@ -95,7 +96,7 @@ export const getUserDetail = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
 
-    const user = await Users.findOne({
+    const user: Users | null = await Users.findOne({
       where: {
         id
       }
@@ -139,7 +140,7 @@ export const updateUser = async (req: Request, res: Response) => {
       }
     )
 
-    const userDataUpdate = await Users.findOne({
+    const userDataUpdate: Users | null = await Users.findOne({
       where: {
         id
       }
@@ -162,9 +163,8 @@ export const updateUser = async (req: Request, res: Response) => {
 export const deleteUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    console.log(111)
 
-    const userData = await Users.destroy({
+    const userData: number = await Users.destroy({
       where: {
         id
       }
@@ -185,4 +185,35 @@ export const deleteUser = async (req: Request, res: Response) => {
   }
 }
 
-//* upload avatar
+export const uploadAvatar = async (req: Request, res: Response) => {
+  //* get data in request
+  const { file, body } = req
+  console.log('🚀 ~ file: user.controller.ts:191 ~ uploadAvatar ~ body:', body)
+  console.log('🚀 ~ file: user.controller.ts:191 ~ uploadAvatar ~ req:', req)
+
+  // //* create path of image
+  const urlImg: string = `${URL}${file?.path}`
+
+  // //* find user info
+  const userInfo = await Users.findOne({
+    where: {
+      id: body.id
+    }
+  })
+
+  if (userInfo?.avatar) {
+    //* update & save avatar of user
+    userInfo.avatar = urlImg
+    await userInfo.save()
+
+    return res.status(200).send({
+      message: 'feature upload avatar',
+      user: userInfo,
+      file: file
+    })
+  } else {
+    return res.status(500).send({
+      message: 'upload avatar failed'
+    })
+  }
+}

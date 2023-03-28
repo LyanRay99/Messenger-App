@@ -11,9 +11,9 @@ const app: Express = express()
 app.use(express.json())
 
 //* set static file
-//* trỏ đường dẫn từ file server.js (__dirname) => folder Public
-const publicPath = path.join(__dirname, './Public')
-app.use('/Public', express.static(publicPath))
+//* trỏ đường dẫn từ file server.ts (__dirname) => folder Public
+const publicPath = path.join(__dirname, './public')
+app.use('/public', express.static(publicPath))
 
 app.get('/', (req: Request, res: Response) => {
   res.send("Hello World! I'm Lyan Ray")

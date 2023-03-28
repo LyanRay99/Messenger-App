@@ -3,6 +3,8 @@ import { Op } from 'sequelize'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import Joi from 'joi'
+import multer from 'multer'
+import mkdirp from 'mkdirp'
 import Users from '../../models/users'
 import { validateRegister } from '../../validations/user.validate'
 import { UsersAttributes, UsersAttributesChangePassword } from '../../types/user.type'
@@ -178,4 +180,45 @@ export const M_validateNewPassword = async (req: Request, res: Response, next: N
         message: 'Password invalid'
       })
     : next()
+}
+
+//* Completed: upload avatar
+export const M_uploadAvatar = (type: string) => {
+  //* create folder before save image
+  const createFolder = mkdirp.sync(`./public/images/${type}`)
+
+  //* declare storage engine of Multer
+  const storage = multer.diskStorage({
+    //* setup path save image
+    destination: (req, res, callback) => {
+      callback(null, `./public/images/${type}`)
+    },
+
+    //* set name of image
+    filename: (req, file, callback) => {
+      callback(null, Date.now() + '_' + file.originalname)
+    }
+  })
+
+  //* declare middleware upload
+  const upload = multer({
+    storage: storage,
+
+    //* check đuôi file image
+    fileFilter: (req, file, callback) => {
+      const extensionImage = ['.png', '.jpg']
+      const extension = file.originalname.slice(-4)
+
+      extensionImage.includes(extension)
+        ? callback(null, true)
+        : callback(new Error('extension file image is not allowed'))
+    },
+
+    //* check size of image <= 1MB
+    limits: {
+      fileSize: 1000000
+    }
+  })
+
+  return upload.single(type)
 }
