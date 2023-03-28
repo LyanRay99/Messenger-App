@@ -1,18 +1,7 @@
 import Joi from 'joi'
+import { UsersAttributes } from '../types/user.type'
 
-interface userData {
-  username: string
-  password: string
-  confirm_password: string
-  email: string
-  full_name: string
-  sex: string
-  address: string
-  birthday: string
-  phone_number: string
-}
-
-export const validateRegister = async (userData: userData) => {
+export const validateRegister = async (userData: UsersAttributes) => {
   const check = Joi.object({
     username: Joi.string().alphanum().min(8).max(15).required(),
     password: Joi.string().min(8).max(10).required(),

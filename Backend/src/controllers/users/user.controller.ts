@@ -1,26 +1,27 @@
-import Users from '../../models/Users'
 import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import Users from '../../models/Users'
+import { UsersAttributes } from './../../types/user.type'
 
 export const register = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const { username, password, email, full_name, sex, address, birthday, phone_number } = req.body
+    const user: UsersAttributes = req.body
     //* create 1 chain to encode password
     const salt = bcrypt.genSaltSync(10)
 
     //* encode salt + password
-    const hashPassword = bcrypt.hashSync(password, salt)
+    const hashPassword = bcrypt.hashSync(user.password, salt)
 
     const newUser = await Users.create({
-      username,
+      username: user.username,
       password: hashPassword,
-      email,
-      full_name,
-      sex,
-      address,
-      birthday,
-      phone_number
+      email: user.email,
+      full_name: user.full_name,
+      sex: user.sex,
+      address: user.address,
+      birthday: user.birthday,
+      phone_number: user.phone_number
     })
 
     return res.status(201).send({
@@ -36,6 +37,35 @@ export const register = async (req: Request, res: Response): Promise<Response> =
     })
   }
 }
+
+// export const login = async (req: Request, res: Response): => {
+//   try {
+//     const { username, password, email } = req.body
+
+//     //* check email & username existed ?
+//     const user = Users.findOne({
+//       where: {
+//         username,
+//         email
+//       }
+//     })
+
+//     //* check password
+//     // const isAuthentication = bcrypt.compareSync(password, user.password)
+
+//     // //* create token by jsonwebtoken package
+//     // const token = jwt.sign({ email: user.username, type: user.type }, 'taidn99', {
+//     //   expiresIn: 60 * 60 //* time expired of token
+//     // })
+
+//   } catch (error: any) {
+//     return res.status(500).send({
+//       status: 500,
+//       message: 'Login failed',
+//       errors: error
+//     })
+//   }
+// }
 
 // * login
 //* get detail
