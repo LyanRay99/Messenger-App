@@ -73,6 +73,7 @@ export const M_checkLogin = async (req: Request, res: Response, next: NextFuncti
 //* Completed: check id existed ?
 export const M_checkID = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params
+  console.log(111)
 
   const check = await Users.findOne({
     where: {

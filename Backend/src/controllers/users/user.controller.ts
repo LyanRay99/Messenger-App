@@ -159,9 +159,30 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 }
 
-//* upload avatar
+export const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    console.log(111)
 
-/**
- ** admin
- ** - delete
- */
+    const userData = await Users.destroy({
+      where: {
+        id
+      }
+    })
+
+    return res.status(200).send({
+      status: 200,
+      message: 'Delete user success',
+      data: userData
+    })
+  } catch (error) {
+    console.log(111)
+    res.status(500).send({
+      status: 500,
+      message: 'Delete user failed',
+      errors: error
+    })
+  }
+}
+
+//* upload avatar

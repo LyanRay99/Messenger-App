@@ -17,5 +17,6 @@ userRouter.get('/', M_authentication, M_authorization, userController.getAllUser
 userRouter.get('/:id', M_authentication, M_checkID, userController.getUserDetail)
 userRouter.put('/:id', M_authentication, M_checkID, userController.updateUser)
 userRouter.put('/change-password/:id', M_authentication, M_checkID, M_checkCurrentPassword, userController.updateUser)
+userRouter.delete('/:id', M_authentication, M_authorization, M_checkID, userController.deleteUser)
 
 export default userRouter
