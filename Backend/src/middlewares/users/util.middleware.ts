@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
-import { Op, col } from 'sequelize'
+import { Op } from 'sequelize'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import Joi from 'joi'
 import Users from '../../models/users'
 import { validateRegister } from '../../validations/user.validate'
-import { UsersAttributes } from '../../types/user.type'
+import { UsersAttributes, UsersAttributesChangePassword } from '../../types/user.type'
 
 //* Completed: check register data
 export const M_checkRegister = async (req: Request, res: Response, next: NextFunction) => {
@@ -130,4 +131,50 @@ export const M_authorization = async (req: Request, res: Response, next: NextFun
       message: 'You are not authorized'
     })
   }
+}
+
+//* Completed: check current password & validate new password
+export const M_checkCurrentPassword = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params
+  const user: UsersAttributesChangePassword = req.body
+
+  const userData = await Users.findOne({
+    where: {
+      id
+    }
+  })
+
+  if (userData) {
+    //* check password (password user request & password in db)
+    const isAuthentication: boolean = bcrypt.compareSync(user.old_password, userData.password)
+
+    isAuthentication
+      ? next()
+      : res.status(401).send({
+          status: 401,
+          message: 'Incorrect password'
+        })
+  }
+}
+
+//* Completed: validate new password
+export const M_validateNewPassword = async (req: Request, res: Response, next: NextFunction) => {
+  const user: UsersAttributesChangePassword = req.body
+
+  const checkPW = Joi.object({
+    new_password: Joi.string().min(8).max(10).required(),
+    confirm_password: Joi.ref('password')
+  })
+
+  const check = checkPW.validate({
+    new_password: user.new_password,
+    confirm_password: user.confirm_password
+  })
+
+  check.error
+    ? res.status(409).send({
+        status: 409,
+        message: 'Password invalid'
+      })
+    : next()
 }

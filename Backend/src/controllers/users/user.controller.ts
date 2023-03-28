@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import Users from '../../models/users'
-import { UsersAttributes } from './../../types/user.type'
+import { UsersAttributes, UsersAttributesUpdates } from './../../types/user.type'
 import { nanoid } from 'nanoid'
 
 export const register = async (req: Request, res: Response): Promise<Response> => {
@@ -115,9 +115,51 @@ export const getUserDetail = async (req: Request, res: Response) => {
   }
 }
 
-//* update
+//* using update & change password
+export const updateUser = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    const user: UsersAttributesUpdates = req.body
+
+    const userData = await Users.update(
+      {
+        password: user.password,
+        full_name: user.full_name,
+        sex: user.sex,
+        address: user.address,
+        birthday: user.birthday,
+        phone_number: user.phone_number,
+        role: user.role,
+        active: user.active
+      },
+      {
+        where: {
+          id
+        }
+      }
+    )
+
+    const userDataUpdate = await Users.findOne({
+      where: {
+        id
+      }
+    })
+
+    return res.status(200).send({
+      status: 200,
+      message: 'Update user success',
+      data: userDataUpdate
+    })
+  } catch (error) {
+    res.status(500).send({
+      status: 500,
+      message: 'Update user failed',
+      errors: error
+    })
+  }
+}
+
 //* upload avatar
-//* change password
 
 /**
  ** admin
