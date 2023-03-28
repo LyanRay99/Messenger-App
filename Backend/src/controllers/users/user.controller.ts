@@ -38,34 +38,37 @@ export const register = async (req: Request, res: Response): Promise<Response> =
   }
 }
 
-// export const login = async (req: Request, res: Response): => {
-//   try {
-//     const { username, password, email } = req.body
+export const login = async (req: Request, res: Response) => {
+  try {
+    const user: UsersAttributes = req.body
 
-//     //* check email & username existed ?
-//     const user = Users.findOne({
-//       where: {
-//         username,
-//         email
-//       }
-//     })
+    // //* create token by jsonwebtoken package
+    const token = jwt.sign({ username: user.username, password: user.password }, 'secretKey', {
+      expiresIn: 60 * 60 //* time expired of token (here setup 1 hour)
+    })
 
-//     //* check password
-//     // const isAuthentication = bcrypt.compareSync(password, user.password)
+    const userData = await Users.findOne({
+      where: {
+        username: user.username
+      }
+    })
 
-//     // //* create token by jsonwebtoken package
-//     // const token = jwt.sign({ email: user.username, type: user.type }, 'taidn99', {
-//     //   expiresIn: 60 * 60 //* time expired of token
-//     // })
-
-//   } catch (error: any) {
-//     return res.status(500).send({
-//       status: 500,
-//       message: 'Login failed',
-//       errors: error
-//     })
-//   }
-// }
+    return res.status(200).send({
+      status: 200,
+      message: 'Login success',
+      data: {
+        token: token,
+        userData: userData
+      }
+    })
+  } catch (error: any) {
+    return res.status(500).send({
+      status: 500,
+      message: 'Login failed',
+      errors: error
+    })
+  }
+}
 
 // * login
 //* get detail

@@ -1,7 +1,8 @@
-import { register } from './user.controller'
+import { register, login } from './user.controller'
 
 const userController = {
-  register: register
+  register: register,
+  login: login
 }
 
 export default userController
