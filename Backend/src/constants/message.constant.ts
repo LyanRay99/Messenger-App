@@ -1,0 +1,28 @@
+export const message = {
+  //* users
+  register_success: 'Register success',
+  register_faild: 'Register failed',
+  login_success: 'Login success',
+  login_faild: 'Login failed',
+  get_user_success: 'Get user success',
+  get_user_faild: 'Get user failed',
+  get_user_detail_success: 'Get user detail success',
+  get_user_detail_faild: 'Get user detail failed',
+  update_user_success: 'Update user success',
+  update_user_faild: 'Update user failed',
+  delete_user_success: 'Delete user success',
+  delete_user_faild: 'Delete user failed',
+  upload_avatar_success: 'Upload avatar success',
+  upload_avatar_faild: 'Upload avatar failed',
+  data_invalid: 'Data invalid',
+  email_or_username_exist: 'Email or Username exist',
+  username_not_exist: 'Username not exist',
+  email_not_exist: 'Email not exist',
+  password_invalid: 'Password invalid',
+  id_not_exist: 'ID not exist',
+  not_logged_in: 'You are not logged in',
+  error_authentication: 'Authentication failed',
+  error_authorization: 'Authorization failed',
+  incorrect_password: 'Incorrect password',
+  extension_file_invalid: 'Extension file invalid'
+} as const

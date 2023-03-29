@@ -4,7 +4,8 @@ import jwt from 'jsonwebtoken'
 import { nanoid } from 'nanoid'
 import Users from '../../models/users'
 import { UsersAttributes, UsersAttributesUpdates } from './../../types/user.type'
-import { URL } from '../../constants/url'
+import { URL } from '../../constants/url.constant'
+import { message } from '../../constants/message.constant'
 
 export const register = async (req: Request, res: Response): Promise<Response> => {
   try {
@@ -30,13 +31,13 @@ export const register = async (req: Request, res: Response): Promise<Response> =
 
     return res.status(201).send({
       status: 201,
-      message: 'Register success',
+      message: message.register_success,
       data: newUser
     })
   } catch (error: any) {
     return res.status(500).send({
       status: 500,
-      message: 'Register failed',
+      message: message.register_faild,
       errors: error
     })
   }
@@ -59,7 +60,7 @@ export const login = async (req: Request, res: Response) => {
 
     return res.status(200).send({
       status: 200,
-      message: 'Login success',
+      message: message.login_success,
       data: {
         token: token,
         userData: userData
@@ -68,7 +69,7 @@ export const login = async (req: Request, res: Response) => {
   } catch (error: any) {
     return res.status(500).send({
       status: 500,
-      message: 'Login failed',
+      message: message.login_faild,
       errors: error
     })
   }
@@ -80,13 +81,13 @@ export const getAllUser = async (req: Request, res: Response) => {
 
     return res.status(200).send({
       status: 200,
-      message: 'Get user success',
+      message: message.get_user_success,
       data: user
     })
   } catch (error) {
     res.status(500).send({
       status: 500,
-      message: 'Get user failed',
+      message: message.get_user_faild,
       errors: error
     })
   }
@@ -104,13 +105,13 @@ export const getUserDetail = async (req: Request, res: Response) => {
 
     return res.status(200).send({
       status: 200,
-      message: 'Get user detail success',
+      message: message.get_user_detail_success,
       data: user
     })
   } catch (error) {
     res.status(500).send({
       status: 500,
-      message: 'Get user detail failed',
+      message: message.get_user_detail_faild,
       errors: error
     })
   }
@@ -148,13 +149,13 @@ export const updateUser = async (req: Request, res: Response) => {
 
     return res.status(200).send({
       status: 200,
-      message: 'Update user success',
+      message: message.update_user_success,
       data: userDataUpdate
     })
   } catch (error) {
     res.status(500).send({
       status: 500,
-      message: 'Update user failed',
+      message: message.update_user_faild,
       errors: error
     })
   }
@@ -172,14 +173,14 @@ export const deleteUser = async (req: Request, res: Response) => {
 
     return res.status(200).send({
       status: 200,
-      message: 'Delete user success',
+      message: message.delete_user_success,
       data: userData
     })
   } catch (error) {
     console.log(111)
     res.status(500).send({
       status: 500,
-      message: 'Delete user failed',
+      message: message.delete_user_faild,
       errors: error
     })
   }
@@ -188,8 +189,6 @@ export const deleteUser = async (req: Request, res: Response) => {
 export const uploadAvatar = async (req: Request, res: Response) => {
   //* get data in request
   const { file, body } = req
-  console.log('🚀 ~ file: user.controller.ts:191 ~ uploadAvatar ~ body:', body)
-  console.log('🚀 ~ file: user.controller.ts:191 ~ uploadAvatar ~ req:', req)
 
   // //* create path of image
   const urlImg: string = `${URL}${file?.path}`
@@ -207,13 +206,13 @@ export const uploadAvatar = async (req: Request, res: Response) => {
     await userInfo.save()
 
     return res.status(200).send({
-      message: 'feature upload avatar',
+      message: message.upload_avatar_success,
       user: userInfo,
       file: file
     })
   } else {
     return res.status(500).send({
-      message: 'upload avatar failed'
+      message: message.upload_avatar_faild
     })
   }
 }

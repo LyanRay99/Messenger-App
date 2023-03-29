@@ -8,6 +8,7 @@ import mkdirp from 'mkdirp'
 import Users from '../../models/users'
 import { validateRegister } from '../../validations/user.validate'
 import { UsersAttributes, UsersAttributesChangePassword } from '../../types/user.type'
+import { message } from '../../constants/message.constant'
 
 //* Completed: check register data
 export const M_checkRegister = async (req: Request, res: Response, next: NextFunction) => {
@@ -33,12 +34,12 @@ export const M_checkRegister = async (req: Request, res: Response, next: NextFun
   valid.error
     ? res.status(409).send({
         status: 409,
-        message: 'Data invalid'
+        message: message.data_invalid
       })
     : check
     ? res.status(409).send({
         status: 409,
-        message: 'Email or Username exist'
+        message: message.email_or_username_exist
       })
     : next()
 }
@@ -57,7 +58,7 @@ export const M_checkLogin = async (req: Request, res: Response, next: NextFuncti
   if (userData === null) {
     return res.status(404).send({
       status: 404,
-      message: 'Username not exist'
+      message: message.username_not_exist
     })
   }
 
@@ -68,7 +69,7 @@ export const M_checkLogin = async (req: Request, res: Response, next: NextFuncti
     ? next()
     : res.status(401).send({
         status: 401,
-        message: 'Password invalid'
+        message: message.incorrect_password
       })
 }
 
@@ -87,7 +88,7 @@ export const M_checkID = async (req: Request, res: Response, next: NextFunction)
     ? next()
     : res.status(404).send({
         status: 404,
-        message: 'ID not exist'
+        message: message.id_not_exist
       })
 }
 
@@ -103,13 +104,13 @@ export const M_authentication = async (req: Request, res: Response, next: NextFu
       ? next()
       : res.status(401).send({
           status: 401,
-          message: 'You are not logged in',
+          message: message.not_logged_in,
           errors: isAuthen
         })
   } catch (error) {
     res.status(500).send({
       status: 500,
-      message: 'Error authentication',
+      message: message.error_authentication,
       errors: error
     })
   }
@@ -131,7 +132,7 @@ export const M_authorization = async (req: Request, res: Response, next: NextFun
   } else {
     res.status(403).send({
       status: 403,
-      message: 'You are not authorized'
+      message: message.error_authorization
     })
   }
 }
@@ -155,7 +156,7 @@ export const M_checkCurrentPassword = async (req: Request, res: Response, next: 
       ? next()
       : res.status(401).send({
           status: 401,
-          message: 'Incorrect password'
+          message: message.incorrect_password
         })
   }
 }
@@ -177,7 +178,7 @@ export const M_validateNewPassword = async (req: Request, res: Response, next: N
   check.error
     ? res.status(409).send({
         status: 409,
-        message: 'Password invalid'
+        message: message.incorrect_password
       })
     : next()
 }
@@ -204,14 +205,12 @@ export const M_uploadAvatar = (type: string) => {
   const upload = multer({
     storage: storage,
 
-    //* check đuôi file image
+    //* check extension of file image
     fileFilter: (req, file, callback) => {
       const extensionImage = ['.png', '.jpg']
       const extension = file.originalname.slice(-4)
 
-      extensionImage.includes(extension)
-        ? callback(null, true)
-        : callback(new Error('extension file image is not allowed'))
+      extensionImage.includes(extension) ? callback(null, true) : callback(new Error(message.extension_file_invalid))
     },
 
     //* check size of image <= 1MB
