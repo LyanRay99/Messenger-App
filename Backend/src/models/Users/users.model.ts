@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelizeConnection from '../../config/db_connect'
 import { UsersAttributes } from '../../types/user.type'
+import User_statuses from '../user_statuses'
 
 export interface UsersInput extends Optional<UsersAttributes, 'id'> {}
 export interface UsersOutput extends Required<UsersAttributes> {}
@@ -81,8 +82,11 @@ Users.init(
   {
     timestamps: true,
     sequelize: sequelizeConnection,
-    underscored: false
+    underscored: false,
+    tableName: 'users'
   }
 )
+
+Users.hasOne(User_statuses)
 
 export default Users
