@@ -1,39 +1,32 @@
 'use strict'
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('User_statuses', {
+    await queryInterface.createTable('Groups', {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.STRING
       },
-      user_id: {
+      groupname: {
         allowNull: false,
-        type: Sequelize.STRING,
-        references: {
-          model: 'Users',
-          key: 'id'
-        }
+        type: Sequelize.STRING
       },
-      status: {
+      avatar: {
         allowNull: false,
-        type: Sequelize.BOOLEAN
-      },
-      last_active: {
-        allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.STRING
       },
       createdAt: {
+        allowNull: false,
         type: Sequelize.DATE
       },
       updatedAt: {
+        allowNull: false,
         type: Sequelize.DATE
       }
     })
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('User_statuses')
+    await queryInterface.dropTable('Groups')
   }
 }

@@ -1,15 +1,14 @@
 'use strict'
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('User_statuses', {
+    await queryInterface.createTable('Messages', {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.STRING
       },
-      user_id: {
+      sender_id: {
         allowNull: false,
         type: Sequelize.STRING,
         references: {
@@ -17,23 +16,29 @@ module.exports = {
           key: 'id'
         }
       },
-      status: {
+      receiver_id: {
         allowNull: false,
-        type: Sequelize.BOOLEAN
+        type: Sequelize.STRING,
+        references: {
+          model: 'Users',
+          key: 'id'
+        }
       },
-      last_active: {
+      content: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.STRING
       },
       createdAt: {
+        allowNull: false,
         type: Sequelize.DATE
       },
       updatedAt: {
+        allowNull: false,
         type: Sequelize.DATE
       }
     })
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('User_statuses')
+    await queryInterface.dropTable('Messages')
   }
 }

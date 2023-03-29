@@ -1,7 +1,10 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelizeConnection from '../../config/db_connect'
 import { UsersAttributes } from '../../types/user.type'
-import User_statuses from '../user_statuses'
+// import User_statuses from '../user_statuses'
+// import Messages from '../messages'
+// import Friendships from '../friendships'
+// import GroupMembers from '../group_members'
 
 export interface UsersInput extends Optional<UsersAttributes, 'id'> {}
 export interface UsersOutput extends Required<UsersAttributes> {}
@@ -21,6 +24,27 @@ class Users extends Model<UsersAttributes, UsersInput> implements UsersAttribute
   public active!: boolean
   public readonly created_at!: Date
   public readonly updated_at!: Date
+
+  static associate({ User_statuses, Messages, Friendships, GroupMembers }: any) {
+    this.hasOne(User_statuses, {
+      foreignKey: 'user_id'
+    })
+    this.hasMany(Messages, {
+      foreignKey: 'sender_id'
+    })
+    this.hasMany(Messages, {
+      foreignKey: 'receiver_id'
+    })
+    this.hasMany(Friendships, {
+      foreignKey: 'user_id'
+    })
+    this.hasMany(Friendships, {
+      foreignKey: 'friend_id'
+    })
+    this.hasMany(GroupMembers, {
+      foreignKey: 'user_id'
+    })
+  }
 }
 
 Users.init(
@@ -82,11 +106,8 @@ Users.init(
   {
     timestamps: true,
     sequelize: sequelizeConnection,
-    underscored: false,
-    tableName: 'users'
+    underscored: false
   }
 )
-
-Users.hasOne(User_statuses)
 
 export default Users
