@@ -1,33 +1,15 @@
 import { Request, Response } from 'express'
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
-import { nanoid } from 'nanoid'
-import Users from '../../models/users'
-import { UsersAttributes, UsersAttributesUpdates } from './../../types/user.type'
-import { URL } from '../../constants/url.constant'
+import { UsersAttributes } from './../../types/user.type'
 import { message } from '../../constants/message.constant'
+import userService from '../../services/users'
 
+//* Completed: register
 export const register = async (req: Request, res: Response): Promise<Response> => {
   try {
     const user: UsersAttributes = req.body
-    //* create 1 chain to encode password
-    const salt: string = bcrypt.genSaltSync(10)
 
-    //* encode salt + password
-    const hashPassword: string = bcrypt.hashSync(user.password, salt)
-
-    const newUser: Users = await Users.create({
-      id: nanoid(), // create id nano
-      username: user.username,
-      password: hashPassword,
-      email: user.email,
-      full_name: user.full_name,
-      sex: user.sex,
-      address: user.address,
-      birthday: user.birthday,
-      phone_number: user.phone_number,
-      role: user?.role
-    })
+    //* service
+    const newUser: UsersAttributes = await userService.register(user)
 
     return res.status(201).send({
       status: 201,
@@ -43,28 +25,18 @@ export const register = async (req: Request, res: Response): Promise<Response> =
   }
 }
 
-export const login = async (req: Request, res: Response) => {
+//* Completed: login
+export const login = async (req: Request, res: Response): Promise<Response> => {
   try {
     const user: UsersAttributes = req.body
 
-    //* create token by jsonwebtoken package
-    const token: string = jwt.sign({ username: user.username, password: user.password }, 'secretKey', {
-      expiresIn: 60 * 60 //* time expired of token (here setup 1 hour)
-    })
-
-    const userData: Users | null = await Users.findOne({
-      where: {
-        username: user.username
-      }
-    })
+    //* service
+    const loginData: Object = await userService.login({ user: user })
 
     return res.status(200).send({
       status: 200,
       message: message.login_success,
-      data: {
-        token: token,
-        userData: userData
-      }
+      data: loginData
     })
   } catch (error: any) {
     return res.status(500).send({
@@ -75,9 +47,10 @@ export const login = async (req: Request, res: Response) => {
   }
 }
 
+//* Completed: get all users
 export const getAllUser = async (req: Request, res: Response) => {
   try {
-    const user: Users[] = await Users.findAll()
+    const user: UsersAttributes[] = await userService.getAllUser()
 
     return res.status(200).send({
       status: 200,
@@ -93,15 +66,13 @@ export const getAllUser = async (req: Request, res: Response) => {
   }
 }
 
+//* Completed: get detail user
 export const getUserDetail = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
 
-    const user: Users | null = await Users.findOne({
-      where: {
-        id
-      }
-    })
+    //* service
+    const user: UsersAttributes = await userService.getUserDetail(id)
 
     return res.status(200).send({
       status: 200,
@@ -117,40 +88,18 @@ export const getUserDetail = async (req: Request, res: Response) => {
   }
 }
 
-//* using update & change password
+//* Completed: update user (using update & change password)
 export const updateUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    const user: UsersAttributesUpdates = req.body
+    const user: UsersAttributes = req.body
 
-    const userData = await Users.update(
-      {
-        password: user.password,
-        full_name: user.full_name,
-        sex: user.sex,
-        address: user.address,
-        birthday: user.birthday,
-        phone_number: user.phone_number,
-        role: user.role,
-        active: user.active
-      },
-      {
-        where: {
-          id
-        }
-      }
-    )
-
-    const userDataUpdate: Users | null = await Users.findOne({
-      where: {
-        id
-      }
-    })
+    const userData: UsersAttributes = await userService.updateUser(id, user)
 
     return res.status(200).send({
       status: 200,
       message: message.update_user_success,
-      data: userDataUpdate
+      data: userData
     })
   } catch (error) {
     res.status(500).send({
@@ -161,15 +110,12 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 }
 
+//* Completed: delete user
 export const deleteUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
 
-    const userData: number = await Users.destroy({
-      where: {
-        id
-      }
-    })
+    const userData: number = await userService.deleteUser(id)
 
     return res.status(200).send({
       status: 200,
@@ -186,31 +132,27 @@ export const deleteUser = async (req: Request, res: Response) => {
   }
 }
 
+//* Completed: upload avatar
 export const uploadAvatar = async (req: Request, res: Response) => {
-  //* get data in request
-  const { file, body } = req
+  try {
+    //* get data in request
+    const { file, body } = req
+    const id: string = body.id
 
-  // //* create path of image
-  const urlImg: string = `${URL}${file?.path}`
+    const userData = await userService.uploadAvatar(file, id)
 
-  // //* find user info
-  const userInfo = await Users.findOne({
-    where: {
-      id: body.id
+    if (userData) {
+      return res.status(200).send({
+        message: message.upload_avatar_success,
+        user: userData?.userInfo,
+        file: userData?.file
+      })
+    } else {
+      return res.status(500).send({
+        message: message.upload_avatar_faild
+      })
     }
-  })
-
-  if (userInfo?.avatar) {
-    //* update & save avatar of user
-    userInfo.avatar = urlImg
-    await userInfo.save()
-
-    return res.status(200).send({
-      message: message.upload_avatar_success,
-      user: userInfo,
-      file: file
-    })
-  } else {
+  } catch (error) {
     return res.status(500).send({
       message: message.upload_avatar_faild
     })
