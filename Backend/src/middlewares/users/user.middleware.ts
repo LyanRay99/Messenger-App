@@ -6,6 +6,7 @@ import Joi from 'joi'
 import multer from 'multer'
 import mkdirp from 'mkdirp'
 import Users from '../../models/users'
+import Friendships from '../../models/friendships'
 import { validateRegister } from '../../validations/user.validate'
 import { UsersAttributes, UsersAttributesChangePassword } from '../../types/user.type'
 import { message } from '../../constants/message.constant'
@@ -74,23 +75,23 @@ export const M_checkLogin = async (req: Request, res: Response, next: NextFuncti
 }
 
 //* Completed: check id existed ?
-export const M_checkID = async (req: Request, res: Response, next: NextFunction) => {
-  const { id } = req.params
-  console.log(111)
+export const M_checkID =
+  (Model: any) => async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params
 
-  const check = await Users.findOne({
-    where: {
-      id
-    }
-  })
+    const check = await Model.findOne({
+      where: {
+        id
+      }
+    })
 
-  check
-    ? next()
-    : res.status(404).send({
-        status: 404,
-        message: message.id_not_exist
-      })
-}
+    check
+      ? next()
+      : res.status(404).send({
+          status: 404,
+          message: message.id_not_exist
+        })
+  }
 
 //* Completed: check authentication
 export const M_authentication = async (req: Request, res: Response, next: NextFunction) => {
@@ -210,7 +211,9 @@ export const M_uploadAvatar = (type: string) => {
       const extensionImage = ['.png', '.jpg']
       const extension = file.originalname.slice(-4)
 
-      extensionImage.includes(extension) ? callback(null, true) : callback(new Error(message.extension_file_invalid))
+      extensionImage.includes(extension)
+        ? callback(null, true)
+        : callback(new Error(message.extension_file_invalid))
     },
 
     //* check size of image <= 1MB
@@ -220,4 +223,80 @@ export const M_uploadAvatar = (type: string) => {
   })
 
   return upload.single(type)
+}
+
+//* Completed: check double ID existed in Users?
+export const M_checkDoubleID =
+  (Model: any) => async (req: Request, res: Response, next: NextFunction) => {
+    const { userA, userB } = req.body
+    const objIds = [userA.id, userB.id]
+    const check = await Model.findAll({
+      where: {
+        id: objIds
+      }
+    })
+
+    check.length === objIds.length
+      ? next()
+      : res.status(409).send({
+          status: 409,
+          message: message.id_not_exist
+        })
+  }
+
+//* Completed: check friendship existed ?
+export const M_checkDoubleIDFriendship = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  const { userA, userB } = req.body
+
+  const check = await Friendships.findOne({
+    where: {
+      [Op.or]: [
+        {
+          user_id: userA.id,
+          friend_id: userB.id
+        },
+        {
+          user_id: userB.id,
+          friend_id: userA.id
+        }
+      ]
+    }
+  })
+
+  check
+    ? res.status(409).send({
+        status: 409,
+        message: message.friendship_existed
+      })
+    : next()
+}
+
+export const M_checkFriendship = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<Response | void> => {
+  const { id: user_id } = req.params //* id of user need get data
+  const { friend_id } = req.body //* id of user handle get data (to check authorization)
+
+  const check = await Friendships.findOne({
+    where: {
+      user_id: user_id,
+      friend_id: friend_id
+    }
+  })
+  console.log('🚀 ~ file: user.middleware.ts:292 ~ check:', check)
+  console.log('🚀 ~ file: user.middleware.ts:292 ~ check:', user_id)
+  console.log('🚀 ~ file: user.middleware.ts:292 ~ check:', friend_id)
+
+  check
+    ? next()
+    : res.status(409).send({
+        status: 409,
+        message: message.friendship_not_existed
+      })
 }

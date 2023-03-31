@@ -6,7 +6,10 @@ import {
   M_checkID,
   M_checkCurrentPassword,
   M_uploadAvatar,
-  M_validateNewPassword
+  M_validateNewPassword,
+  M_checkDoubleID,
+  M_checkDoubleIDFriendship,
+  M_checkFriendship
 } from './user.middleware'
 
 const userMiddleware = {
@@ -17,7 +20,10 @@ const userMiddleware = {
   M_checkID,
   M_checkCurrentPassword,
   M_uploadAvatar,
-  M_validateNewPassword
+  M_validateNewPassword,
+  M_checkDoubleID,
+  M_checkDoubleIDFriendship,
+  M_checkFriendship
 }
 
 export default userMiddleware

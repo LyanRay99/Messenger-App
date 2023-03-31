@@ -32,5 +32,19 @@ export const message = {
   get_user_status_detail_success: 'Get user status detail success',
   get_user_status_detail_faild: 'Get user status detail failed',
   update_user_status_success: 'Update user status success',
-  update_user_status_faild: 'Update user status failed'
+  update_user_status_faild: 'Update user status failed',
+
+  //* friendship
+  create_friendship_success: 'Create friendship success',
+  create_friendship_faild: 'Create friendship failed',
+  get_friendship_success: 'Get friendship success',
+  get_friendship_faild: 'Get friendship failed',
+  get_friendship_detail_success: 'Get friendship detail success',
+  get_friendship_detail_faild: 'Get friendship detail failed',
+  update_friendship_success: 'Update friendship success',
+  update_friendship_faild: 'Update friendship failed',
+  delete_friendship_success: 'Delete friendship success',
+  delete_friendship_faild: 'Delete friendship failed',
+  friendship_existed: 'Friendship existed',
+  friendship_not_existed: 'Friendship not existed'
 } as const

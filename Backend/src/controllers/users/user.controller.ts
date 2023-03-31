@@ -61,7 +61,7 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
 }
 
 //* Completed: get all users
-export const getAllUser = async (req: Request, res: Response) => {
+export const getAllUser = async (req: Request, res: Response): Promise<Response> => {
   try {
     const user: UsersAttributes[] = await userService.getAllUser()
 
@@ -71,7 +71,7 @@ export const getAllUser = async (req: Request, res: Response) => {
       data: user
     })
   } catch (error) {
-    res.status(500).send({
+    return res.status(500).send({
       status: 500,
       message: message.get_user_faild,
       errors: error
@@ -80,7 +80,7 @@ export const getAllUser = async (req: Request, res: Response) => {
 }
 
 //* Completed: get detail user
-export const getUserDetail = async (req: Request, res: Response) => {
+export const getUserDetail = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { id } = req.params
 
@@ -93,7 +93,7 @@ export const getUserDetail = async (req: Request, res: Response) => {
       data: user
     })
   } catch (error) {
-    res.status(500).send({
+    return res.status(500).send({
       status: 500,
       message: message.get_user_detail_faild,
       errors: error
@@ -102,7 +102,7 @@ export const getUserDetail = async (req: Request, res: Response) => {
 }
 
 //* Completed: update user (using update & change password)
-export const updateUser = async (req: Request, res: Response) => {
+export const updateUser = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { id } = req.params
     const user: UsersAttributes = req.body
@@ -115,7 +115,7 @@ export const updateUser = async (req: Request, res: Response) => {
       data: userData
     })
   } catch (error) {
-    res.status(500).send({
+    return res.status(500).send({
       status: 500,
       message: message.update_user_faild,
       errors: error
@@ -124,7 +124,7 @@ export const updateUser = async (req: Request, res: Response) => {
 }
 
 //* Completed: delete user
-export const deleteUser = async (req: Request, res: Response) => {
+export const deleteUser = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { id } = req.params
 
@@ -140,8 +140,7 @@ export const deleteUser = async (req: Request, res: Response) => {
       data: userData
     })
   } catch (error) {
-    console.log(111)
-    res.status(500).send({
+    return res.status(500).send({
       status: 500,
       message: message.delete_user_faild,
       errors: error
@@ -150,7 +149,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 }
 
 //* Completed: upload avatar
-export const uploadAvatar = async (req: Request, res: Response) => {
+export const uploadAvatar = async (req: Request, res: Response): Promise<Response> => {
   try {
     //* get data in request
     const { file, body } = req

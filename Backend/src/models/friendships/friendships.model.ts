@@ -7,13 +7,16 @@ import { TableName } from '../../constants/tableName.constant'
 export interface FriendshipsInput extends Optional<FriendshipAttributes, 'id'> {}
 export interface FriendshipsOutput extends Required<FriendshipAttributes> {}
 
-class Friendships extends Model<FriendshipAttributes, FriendshipsInput> implements FriendshipAttributes {
+class Friendships
+  extends Model<FriendshipAttributes, FriendshipsInput>
+  implements FriendshipAttributes
+{
   public id!: string
   public user_id!: string
   public friend_id!: string
   public status!: boolean
   public best_friend!: boolean
-  public blocked!: boolean
+  public block!: boolean
   public readonly created_at!: Date
   public readonly updated_at!: Date
 
@@ -53,16 +56,8 @@ Friendships.init(
       type: DataTypes.BOOLEAN,
       allowNull: false
     },
-    blocked: {
+    block: {
       type: DataTypes.BOOLEAN,
-      allowNull: false
-    },
-    created_at: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
-    updated_at: {
-      type: DataTypes.DATE,
       allowNull: false
     }
   },

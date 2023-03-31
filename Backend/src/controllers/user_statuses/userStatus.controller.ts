@@ -4,7 +4,7 @@ import { message } from '../../constants/message.constant'
 import userStatusService from '../../services/user_statuses'
 
 //* Completed: get all users
-export const getAllUserStatus = async (req: Request, res: Response) => {
+export const getAllUserStatus = async (req: Request, res: Response): Promise<Response> => {
   try {
     const userStatus: UserStatusesAttributes[] = await userStatusService.getAllUserStatus()
 
@@ -14,7 +14,7 @@ export const getAllUserStatus = async (req: Request, res: Response) => {
       data: userStatus
     })
   } catch (error) {
-    res.status(500).send({
+    return res.status(500).send({
       status: 500,
       message: message.get_user_status_faild,
       errors: error
@@ -23,9 +23,9 @@ export const getAllUserStatus = async (req: Request, res: Response) => {
 }
 
 //* Completed: get detail user
-export const getUserStatusDetail = async (req: Request, res: Response) => {
+export const getUserStatusDetail = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const { user_id } = req.params //* id of user need get data
+    const { id: user_id } = req.params //* id of user need get data
     const { friend_id } = req.body //* id of user handle get data (to check authorization)
 
     //* TODO: service check relation of 2 users
@@ -39,7 +39,7 @@ export const getUserStatusDetail = async (req: Request, res: Response) => {
       data: userStatus
     })
   } catch (error) {
-    res.status(500).send({
+    return res.status(500).send({
       status: 500,
       message: message.get_user_status_detail_faild,
       errors: error
@@ -48,7 +48,7 @@ export const getUserStatusDetail = async (req: Request, res: Response) => {
 }
 
 //* Completed: update user (using update & change password)
-export const updateUserStatus = async (req: Request, res: Response) => {
+export const updateUserStatus = async (req: Request, res: Response): Promise<Response> => {
   try {
     const userStatus: UserStatusesAttributes = req.body
 
@@ -60,7 +60,7 @@ export const updateUserStatus = async (req: Request, res: Response) => {
       data: userData
     })
   } catch (error) {
-    res.status(500).send({
+    return res.status(500).send({
       status: 500,
       message: message.update_user_status_faild,
       errors: error

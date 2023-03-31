@@ -4,7 +4,7 @@ export interface FriendshipAttributes {
   friend_id: string
   status: boolean
   best_friend: boolean
-  blocked: boolean
+  block: boolean
   created_at?: Date
   updated_at?: Date
 }

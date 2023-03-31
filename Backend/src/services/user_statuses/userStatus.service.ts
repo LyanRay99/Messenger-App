@@ -46,5 +46,3 @@ export const deleteUserStatus = async (id: string): Promise<number> =>
       user_id: id
     }
   })
-
-//* TODO: check relation user A & user B to get detail user data
