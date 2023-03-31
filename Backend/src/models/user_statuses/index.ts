@@ -1,3 +1,3 @@
-import UserStatuses from './user_statuses.model'
+import UserStatuses from './userStatus.model'
 
 export default UserStatuses

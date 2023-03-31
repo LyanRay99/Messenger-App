@@ -2,7 +2,8 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { nanoid } from 'nanoid'
 import Users from '../../models/users'
-import { UsersAttributes } from '../../types/user.type'
+import UserStatuses from '../../models/user_statuses'
+import { UsersAttributes, UserStatusesAttributes } from '../../types/user.type'
 import { URL } from '../../constants/url.constant'
 
 //* Completed: register
@@ -15,7 +16,7 @@ export const register = async (user: UsersAttributes): Promise<UsersAttributes> 
 
   //* create new user
   const newUser: UsersAttributes = await Users.create({
-    id: nanoid(), // create id nano
+    id: nanoid(),
     username: user.username,
     password: hashPassword,
     email: user.email,
@@ -26,15 +27,20 @@ export const register = async (user: UsersAttributes): Promise<UsersAttributes> 
     phone_number: user.phone_number,
     role: user?.role
   })
+
   return newUser
 }
 
 //* Completed: login
 export const login = async ({ user }: { user: UsersAttributes }): Promise<Object> => {
   //* create token by jsonwebtoken package
-  const token: string = jwt.sign({ username: user.username, password: user.password }, 'secretKey', {
-    expiresIn: 60 * 60 //* time expired of token (here setup 1 hour)
-  })
+  const token: string = jwt.sign(
+    { username: user.username, password: user.password },
+    'secretKey',
+    {
+      expiresIn: 60 * 60 //* time expired of token (here setup 1 hour)
+    }
+  )
 
   //* find data user by username
   const userData: Users | null = await Users.findOne({
@@ -45,28 +51,21 @@ export const login = async ({ user }: { user: UsersAttributes }): Promise<Object
 
   return {
     token: token,
-    useData: userData
+    userData: userData
   }
 }
 
 //* Completed: get all users
-export const getAllUser = async (): Promise<UsersAttributes[]> => {
-  const user: UsersAttributes[] = await Users.findAll()
-
-  return user
-}
+export const getAllUser = async (): Promise<UsersAttributes[]> => await Users.findAll()
 
 //* Completed: get detail user
-export const getUserDetail = async (id: string): Promise<UsersAttributes> => {
+export const getUserDetail = async (id: string): Promise<UsersAttributes> =>
   //* find data user by id
-  const user: UsersAttributes = (await Users.findOne({
+  (await Users.findOne({
     where: {
       id
     }
   })) as UsersAttributes
-
-  return user
-}
 
 //* Completed: update user (using update & change password)
 export const updateUser = async (id: string, user: UsersAttributes): Promise<UsersAttributes> => {
@@ -98,15 +97,12 @@ export const updateUser = async (id: string, user: UsersAttributes): Promise<Use
 }
 
 //* Completed: delete user
-export const deleteUser = async (id: string): Promise<number> => {
-  const userData: number = await Users.destroy({
+export const deleteUser = async (id: string): Promise<number> =>
+  await Users.destroy({
     where: {
       id
     }
   })
-
-  return userData
-}
 
 //* Completed: upload avatar
 export const uploadAvatar = async (file: any, id: string) => {

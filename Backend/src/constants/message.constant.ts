@@ -24,5 +24,13 @@ export const message = {
   error_authentication: 'Authentication failed',
   error_authorization: 'Authorization failed',
   incorrect_password: 'Incorrect password',
-  extension_file_invalid: 'Extension file invalid'
+  extension_file_invalid: 'Extension file invalid',
+
+  //* user_statuses
+  get_user_status_success: 'Get user status success',
+  get_user_status_faild: 'Get user status failed',
+  get_user_status_detail_success: 'Get user status detail success',
+  get_user_status_detail_faild: 'Get user status detail failed',
+  update_user_status_success: 'Update user status success',
+  update_user_status_faild: 'Update user status failed'
 } as const

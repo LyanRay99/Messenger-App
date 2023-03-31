@@ -1,20 +1,27 @@
 import { Request, Response } from 'express'
-import { UsersAttributes } from './../../types/user.type'
+import { UsersAttributes, UserStatusesAttributes } from './../../types/user.type'
 import { message } from '../../constants/message.constant'
 import userService from '../../services/users'
+import userStatusService from '../../services/user_statuses'
 
 //* Completed: register
 export const register = async (req: Request, res: Response): Promise<Response> => {
   try {
     const user: UsersAttributes = req.body
 
-    //* service
+    //* service create new user
     const newUser: UsersAttributes = await userService.register(user)
+
+    //* service create new user status
+    const newUserStatus: UserStatusesAttributes = await userStatusService.createUserStatus(
+      newUser.id
+    )
 
     return res.status(201).send({
       status: 201,
       message: message.register_success,
-      data: newUser
+      data: newUser,
+      status_of_user: newUserStatus
     })
   } catch (error: any) {
     return res.status(500).send({
@@ -30,8 +37,14 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
   try {
     const user: UsersAttributes = req.body
 
-    //* service
-    const loginData: Object = await userService.login({ user: user })
+    //* service login
+    const loginData: any = await userService.login({ user: user })
+
+    //* update status of user when user login
+    //* service get status
+    const userStatusData = await userStatusService.getUserStatusDetail(loginData.userData.id)
+    //* service update status
+    await userStatusService.updateUserStatus(userStatusData)
 
     return res.status(200).send({
       status: 200,
@@ -115,6 +128,10 @@ export const deleteUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
 
+    //* delete user status
+    await userStatusService.deleteUserStatus(id)
+
+    //* delete user
     const userData: number = await userService.deleteUser(id)
 
     return res.status(200).send({

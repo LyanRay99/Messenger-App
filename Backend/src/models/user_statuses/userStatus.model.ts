@@ -7,7 +7,7 @@ import { TableName } from '../../constants/tableName.constant'
 export interface UserStatusesInput extends Optional<UserStatusesAttributes, 'id'> {}
 export interface UserStatusesOutput extends Required<UserStatusesAttributes> {}
 
-class UserStatuses extends Model<UserStatusesAttributes, UserStatusesInput> implements UserStatusesAttributes {
+class User_Statuses extends Model<UserStatusesAttributes, UserStatusesInput> implements UserStatusesAttributes {
   public id!: string
   public user_id!: string
   public status!: boolean
@@ -21,7 +21,7 @@ class UserStatuses extends Model<UserStatusesAttributes, UserStatusesInput> impl
   }
 }
 
-UserStatuses.init(
+User_Statuses.init(
   {
     id: {
       type: DataTypes.STRING,
@@ -43,14 +43,6 @@ UserStatuses.init(
     last_active: {
       type: DataTypes.DATE,
       allowNull: false
-    },
-    created_at: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
-    updated_at: {
-      type: DataTypes.DATE,
-      allowNull: false
     }
   },
   {
@@ -60,4 +52,4 @@ UserStatuses.init(
   }
 )
 
-export default UserStatuses
+export default User_Statuses
