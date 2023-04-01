@@ -74,11 +74,29 @@ export const M_checkLogin = async (req: Request, res: Response, next: NextFuncti
       })
 }
 
-//* Completed: check id existed ?
-export const M_checkID =
+//* Completed: check id existed ? (get id from params)
+export const M_checkIdParams =
   (Model: any) => async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params
 
+    const check = await Model.findOne({
+      where: {
+        id
+      }
+    })
+
+    check
+      ? next()
+      : res.status(404).send({
+          status: 404,
+          message: message.id_not_exist
+        })
+  }
+
+//* Completed: check id existed ? (get id from body)
+export const M_checkIdBody =
+  (Model: any) => async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.body
     const check = await Model.findOne({
       where: {
         id
@@ -244,7 +262,7 @@ export const M_checkDoubleID =
         })
   }
 
-//* Completed: check friendship existed ?
+//* Completed: check friendship existed ? (to response status 409)
 export const M_checkDoubleIDFriendship = async (
   req: Request,
   res: Response,
@@ -275,23 +293,21 @@ export const M_checkDoubleIDFriendship = async (
     : next()
 }
 
+//* Completed: check friendship existed ? (to go on)
 export const M_checkFriendship = async (
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<Response | void> => {
-  const { id: user_id } = req.params //* id of user need get data
-  const { friend_id } = req.body //* id of user handle get data (to check authorization)
+  const { id } = req.params //* id of user need get data
+  const { userA, userB } = req.body //* friend_id of user handle get data (to check authorization)
 
   const check = await Friendships.findOne({
     where: {
-      user_id: user_id,
-      friend_id: friend_id
+      user_id: userA.id,
+      friend_id: userB.id
     }
   })
-  console.log('🚀 ~ file: user.middleware.ts:292 ~ check:', check)
-  console.log('🚀 ~ file: user.middleware.ts:292 ~ check:', user_id)
-  console.log('🚀 ~ file: user.middleware.ts:292 ~ check:', friend_id)
 
   check
     ? next()

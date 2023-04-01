@@ -1,5 +1,5 @@
 import express from 'express'
-import friendshipController from '../controllers/friendship'
+import friendshipController from '../controllers/friendships'
 import utilMiddleware from '../middlewares/utils'
 import Users from '../models/users'
 

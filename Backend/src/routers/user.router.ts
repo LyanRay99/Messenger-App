@@ -22,19 +22,19 @@ userRouter.get(
 userRouter.get(
   '/:id',
   utilMiddleware.M_authentication,
-  utilMiddleware.M_checkID(Users),
+  utilMiddleware.M_checkIdParams(Users),
   userController.getUserDetail
 )
 userRouter.put(
   '/:id',
   utilMiddleware.M_authentication,
-  utilMiddleware.M_checkID(Users),
+  utilMiddleware.M_checkIdParams(Users),
   userController.updateUser
 )
 userRouter.put(
   '/change-password/:id',
   utilMiddleware.M_authentication,
-  utilMiddleware.M_checkID(Users),
+  utilMiddleware.M_checkIdParams(Users),
   utilMiddleware.M_checkCurrentPassword,
   userController.updateUser
 )
@@ -42,7 +42,7 @@ userRouter.delete(
   '/:id',
   utilMiddleware.M_authentication,
   utilMiddleware.M_authorization,
-  utilMiddleware.M_checkID(Users),
+  utilMiddleware.M_checkIdParams(Users),
   userController.deleteUser
 )
 

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { UserStatusesAttributes } from './../../types/user.type'
+import { UserStatusesAttributes } from '../../types/user.type'
 import { FriendshipAttributes } from '../../types/friendships.type'
 import { message } from '../../constants/message.constant'
 import userStatusService from '../../services/user_statuses'

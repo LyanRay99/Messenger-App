@@ -21,7 +21,7 @@ userStatusRouter.put(
   '/:id',
   utilMiddleware.M_authentication,
   utilMiddleware.M_authorization,
-  utilMiddleware.M_checkID(UserStatuses),
+  utilMiddleware.M_checkIdParams(UserStatuses),
   userStatusController.getUserStatusDetail
 )
 
