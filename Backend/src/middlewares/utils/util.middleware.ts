@@ -7,7 +7,7 @@ import multer from 'multer'
 import mkdirp from 'mkdirp'
 import Users from '../../models/users'
 import Friendships from '../../models/friendships'
-import { validateRegister } from '../../validations/user.validate'
+import { validateRegister } from '../validations/user.validate'
 import { UsersAttributes, UsersAttributesChangePassword } from '../../types/user.type'
 import { message } from '../../constants/message.constant'
 

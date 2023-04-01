@@ -1,27 +1,27 @@
 import express from 'express'
 import userStatusController from '../controllers/user_statuses'
-import userMiddleware from '../middlewares/users'
+import utilMiddleware from '../middlewares/utils'
 import UserStatuses from '../models/user_statuses'
 
 const userStatusRouter = express.Router()
 
 userStatusRouter.get(
   '/',
-  userMiddleware.M_authentication,
-  userMiddleware.M_authorization,
+  utilMiddleware.M_authentication,
+  utilMiddleware.M_authorization,
   userStatusController.getAllUserStatus
 )
 userStatusRouter.get(
   '/:id',
-  userMiddleware.M_authentication,
-  userMiddleware.M_checkFriendship,
+  utilMiddleware.M_authentication,
+  utilMiddleware.M_checkFriendship,
   userStatusController.getUserStatusDetail
 )
 userStatusRouter.put(
   '/:id',
-  userMiddleware.M_authentication,
-  userMiddleware.M_authorization,
-  userMiddleware.M_checkID(UserStatuses),
+  utilMiddleware.M_authentication,
+  utilMiddleware.M_authorization,
+  utilMiddleware.M_checkID(UserStatuses),
   userStatusController.getUserStatusDetail
 )
 

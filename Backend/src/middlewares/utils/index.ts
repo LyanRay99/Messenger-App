@@ -10,9 +10,9 @@ import {
   M_checkDoubleID,
   M_checkDoubleIDFriendship,
   M_checkFriendship
-} from './user.middleware'
+} from './util.middleware'
 
-const userMiddleware = {
+const utilMiddleware = {
   M_checkRegister,
   M_checkLogin,
   M_authentication,
@@ -26,4 +26,4 @@ const userMiddleware = {
   M_checkFriendship
 }
 
-export default userMiddleware
+export default utilMiddleware
