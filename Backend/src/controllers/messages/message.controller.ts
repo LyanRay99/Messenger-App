@@ -2,13 +2,18 @@ import { Request, Response } from 'express'
 import { MessagesAttributes } from '../../types/messages.type'
 import { message } from '../../constants/message.constant'
 import messageService from '../../services/messages'
+import messageStatusService from '../../services/message_statuses'
 
-//* Completed: create friendship
+//* Completed: create message
 export const createMessage = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { userA, userB, content }: { userA: object; userB: object; content: string } = req.body
 
+    //* create message
     const newMessage = await messageService.createMessage(userA, userB, content)
+
+    //* create status of message
+    await messageStatusService.createMessageStatus(newMessage.id)
 
     return res.status(200).send({
       status: 200,
@@ -134,7 +139,12 @@ export const updateMessage = async (req: Request, res: Response): Promise<Respon
 export const deleteMessage = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { id } = req.params //* id of user need get message data
-    const messageDelete = await messageService.deleteMessage(id)
+
+    //* delete message
+    const messageDelete: any = await messageService.deleteMessage(id)
+
+    //* delete status of message
+    await messageStatusService.deleteMessageStatus(messageDelete.id)
 
     return res.status(200).send({
       status: 200,
