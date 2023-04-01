@@ -3,6 +3,7 @@ import { UsersAttributes, UserStatusesAttributes } from './../../types/user.type
 import { message } from '../../constants/message.constant'
 import userService from '../../services/users'
 import userStatusService from '../../services/user_statuses'
+import friendshipService from '../../services/friendships'
 
 //* Completed: register
 export const register = async (req: Request, res: Response): Promise<Response> => {
@@ -130,6 +131,9 @@ export const deleteUser = async (req: Request, res: Response): Promise<Response>
 
     //* delete user status
     await userStatusService.deleteUserStatus(id)
+
+    //* delete friendship of user
+    await friendshipService.deleteFriendshipWhenUserIsDeleted(id)
 
     //* delete user
     const userData: number = await userService.deleteUser(id)
