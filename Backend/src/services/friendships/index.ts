@@ -3,7 +3,8 @@ import {
   getAllFriendship,
   getAllFriendshipOfTheUser,
   updateFriendship,
-  deleteFriendship
+  deleteFriendship,
+  deleteFriendshipWhenUserIsDeleted
 } from './friendship.service'
 
 const friendshipService = {
@@ -11,7 +12,8 @@ const friendshipService = {
   getAllFriendship,
   getAllFriendshipOfTheUser,
   updateFriendship,
-  deleteFriendship
+  deleteFriendship,
+  deleteFriendshipWhenUserIsDeleted
 }
 
 export default friendshipService

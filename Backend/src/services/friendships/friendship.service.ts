@@ -70,12 +70,20 @@ export const updateFriendship = async (
 }
 
 //* Completed: delete friendship
-export const deleteFriendship = async (userA_id: string, userB_id: string) =>
+export const deleteFriendship = async (userA_id: string, userB_id: string): Promise<number> =>
   await Friendships.destroy({
     where: {
       [Op.or]: [
         { user_id: userA_id, friend_id: userB_id },
         { user_id: userB_id, friend_id: userA_id }
       ]
+    }
+  })
+
+//* Completed: delete friendship when user is deleted
+export const deleteFriendshipWhenUserIsDeleted = async (userA_id: string): Promise<number> =>
+  await Friendships.destroy({
+    where: {
+      [Op.or]: [{ user_id: userA_id }, { friend_id: userA_id }]
     }
   })

@@ -46,5 +46,25 @@ export const message = {
   delete_friendship_success: 'Delete friendship success',
   delete_friendship_faild: 'Delete friendship failed',
   friendship_existed: 'Friendship existed',
-  friendship_not_existed: 'Friendship not existed'
+  friendship_not_existed: 'Friendship not existed',
+
+  //* messages
+  create_message_success: 'Create message success',
+  create_message_faild: 'Create message failed',
+  get_message_success: 'Get message success',
+  get_message_faild: 'Get message failed',
+  get_message_detail_success: 'Get message detail success',
+  get_message_detail_faild: 'Get message detail failed',
+  update_message_success: 'Update message success',
+  update_message_faild: 'Update message failed',
+  delete_message_success: 'Delete message success',
+  delete_message_faild: 'Delete message failed',
+
+  //* message status
+  get_message_status_success: 'Get message status success',
+  get_message_status_faild: 'Get message status failed',
+  get_message_status_detail_success: 'Get message status detail success',
+  get_message_status_detail_faild: 'Get message status detail failed',
+  update_message_status_success: 'Update message status success',
+  update_message_status_faild: 'Update message status failed'
 } as const

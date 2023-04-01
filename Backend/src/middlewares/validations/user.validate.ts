@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { UsersAttributes } from '../types/user.type'
+import { UsersAttributes } from '../../types/user.type'
 
 export const validateRegister = async (userData: UsersAttributes) => {
   const check = Joi.object({

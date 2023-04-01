@@ -25,13 +25,10 @@ export const getAllUserStatus = async (req: Request, res: Response): Promise<Res
 //* Completed: get detail user
 export const getUserStatusDetail = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const { id: user_id } = req.params //* id of user need get data
-    const { friend_id } = req.body //* id of user handle get data (to check authorization)
-
-    //* TODO: service check relation of 2 users
+    const { userA, userB } = req.body //* id of user handle get data (to check authorization)
 
     //* service get user detail data
-    const userStatus: UserStatusesAttributes = await userStatusService.getUserStatusDetail(user_id)
+    const userStatus: UserStatusesAttributes = await userStatusService.getUserStatusDetail(userA.id)
 
     return res.status(200).send({
       status: 200,
